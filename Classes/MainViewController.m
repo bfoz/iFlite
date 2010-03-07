@@ -95,6 +95,12 @@ cst_voice *register_cmu_us_kal(const char *voxdir);
 #pragma mark -
 #pragma mark UITextFieldDelegate
 
+void completion(SystemSoundID ssID, void* clientData)
+{
+    AudioServicesDisposeSystemSoundID(ssID);
+    AudioServicesRemoveSystemSoundCompletion(ssID);
+}
+
 - (BOOL)textFieldShouldReturn:(UITextField*)field
 {
     NSArray* paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
@@ -110,6 +116,8 @@ cst_voice *register_cmu_us_kal(const char *voxdir);
     //Use audio sevices to create the sound
     SystemSoundID soundID;
     AudioServicesCreateSystemSoundID((CFURLRef)url, &soundID);
+
+    AudioServicesAddSystemSoundCompletion(soundID, NULL, NULL, completion, NULL);
 
     //Use audio services to play the sound
     AudioServicesPlaySystemSound(soundID);
