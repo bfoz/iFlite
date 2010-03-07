@@ -1,0 +1,3 @@
+[submodule "lib/flite"]
+	path = lib/flite
+	url = git://github.com/bfoz/flite.git
