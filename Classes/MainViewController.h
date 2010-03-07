@@ -8,9 +8,13 @@
 
 #import "FlipsideViewController.h"
 
+#import "flite.h"
+
 @interface MainViewController : UIViewController <FlipsideViewControllerDelegate, UITextFieldDelegate>
 {
     UITextField*    textInput;
+
+    cst_voice*	voice;
 }
 
 @property (nonatomic, retain) IBOutlet UITextField *textInput;

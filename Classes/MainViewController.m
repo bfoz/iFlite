@@ -6,6 +6,8 @@
 //  Copyright __MyCompanyName__ 2010. All rights reserved.
 //
 
+#import <AudioToolbox/AudioServices.h>
+
 #import "MainViewController.h"
 #import "MainView.h"
 
@@ -14,9 +16,14 @@
 
 @synthesize textInput;
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-    if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-        // Custom initialization
+cst_voice *register_cmu_us_kal(const char *voxdir);
+
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])
+    {
+	flite_init();
+	voice = register_cmu_us_kal(NULL);
     }
     return self;
 }
@@ -90,6 +97,23 @@
 
 - (BOOL)textFieldShouldReturn:(UITextField*)field
 {
+    NSArray* paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
+							 NSUserDomainMask,
+							 YES);
+    NSString* dir = [paths objectAtIndex:0];
+    NSString* path = [NSString stringWithFormat: @"%@/%s", dir, "recording.wav"];
+
+    flite_text_to_speech([field.text UTF8String], voice, [path UTF8String]);
+
+    NSURL* url = [NSURL fileURLWithPath:path isDirectory:NO];
+
+    //Use audio sevices to create the sound
+    SystemSoundID soundID;
+    AudioServicesCreateSystemSoundID((CFURLRef)url, &soundID);
+
+    //Use audio services to play the sound
+    AudioServicesPlaySystemSound(soundID);
+
     [textInput resignFirstResponder];
     return YES;
 }
