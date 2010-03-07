@@ -1,0 +1,6 @@
+build/
+
+# Xcode stuff
+*.app
+*.mode1v3
+*.pbxuser
