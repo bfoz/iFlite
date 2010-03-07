@@ -12,6 +12,7 @@
 
 @implementation MainViewController
 
+@synthesize textInput;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
@@ -78,9 +79,19 @@
 }
 
 
-- (void)dealloc {
+- (void)dealloc
+{
+    [textInput release];
     [super dealloc];
 }
 
+#pragma mark -
+#pragma mark UITextFieldDelegate
+
+- (BOOL)textFieldShouldReturn:(UITextField*)field
+{
+    [textInput resignFirstResponder];
+    return YES;
+}
 
 @end

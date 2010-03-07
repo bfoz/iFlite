@@ -8,8 +8,12 @@
 
 #import "FlipsideViewController.h"
 
-@interface MainViewController : UIViewController <FlipsideViewControllerDelegate> {
+@interface MainViewController : UIViewController <FlipsideViewControllerDelegate, UITextFieldDelegate>
+{
+    UITextField*    textInput;
 }
+
+@property (nonatomic, retain) IBOutlet UITextField *textInput;
 
 - (IBAction)showInfo;
 
