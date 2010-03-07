@@ -1,0 +1,15 @@
+Introduction
+------------
+iFlite is a simple iPhone OS demonstration app that illustrates building and using the CMU flite text-to-speech engine.
+
+To use it, tap the text field to bring up the keyboard. Then type the text you want to be spoken and tap the return button.
+
+Getting the Source
+------------------
+    git clone git://github.com/bfoz/iFlite.git
+    git submodule init
+    git submodule update
+
+Build and Install
+-----------------
+Open iFlite.xcodeproj and then build it for either the simulator or a device. Install it in the normal fashion.
