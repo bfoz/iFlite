@@ -11,19 +11,36 @@
 #import "MainViewController.h"
 #import "MainView.h"
 
+#define VOICE_INDEX_TIME_AWB	0
+#define VOICE_INDEX_US_AWB	1
+#define VOICE_INDEX_US_KAL	2
+#define VOICE_INDEX_US_KAL16	3
+#define VOICE_INDEX_US_RMS	4
+#define VOICE_INDEX_US_SLT	5
 
 @implementation MainViewController
 
 @synthesize textInput;
 
+cst_voice *register_cmu_time_awb(const char *voxdir);
+cst_voice *register_cmu_us_awb(const char *voxdir);
 cst_voice *register_cmu_us_kal(const char *voxdir);
+cst_voice *register_cmu_us_kal16(const char *voxdir);
+cst_voice *register_cmu_us_rms(const char *voxdir);
+cst_voice *register_cmu_us_slt(const char *voxdir);
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])
     {
 	flite_init();
-	voice = register_cmu_us_kal(NULL);
+	voices[VOICE_INDEX_TIME_AWB] = register_cmu_time_awb(NULL);
+	voices[VOICE_INDEX_US_AWB] = register_cmu_us_awb(NULL);
+	voices[VOICE_INDEX_US_KAL] = register_cmu_us_kal(NULL);
+	voices[VOICE_INDEX_US_KAL16] = register_cmu_us_kal16(NULL);
+	voices[VOICE_INDEX_US_RMS] = register_cmu_us_rms(NULL);
+	voices[VOICE_INDEX_US_SLT] = register_cmu_us_slt(NULL);
+	voice = voices[VOICE_INDEX_US_KAL];
     }
     return self;
 }

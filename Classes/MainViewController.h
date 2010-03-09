@@ -14,6 +14,7 @@
 {
     UITextField*    textInput;
 
+    cst_voice*	voices[6];
     cst_voice*	voice;
 }
 
