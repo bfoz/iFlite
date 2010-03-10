@@ -13,12 +13,14 @@
 @interface MainViewController : UIViewController <FlipsideViewControllerDelegate, UITextFieldDelegate>
 {
     UITextField*    textInput;
+    UILabel*	    voiceLabel;
 
     cst_voice*	voices[6];
     cst_voice*	voice;
 }
 
 @property (nonatomic, retain) IBOutlet UITextField *textInput;
+@property (nonatomic, retain) IBOutlet UILabel* voiceLabel;
 
 - (IBAction)showInfo;
 

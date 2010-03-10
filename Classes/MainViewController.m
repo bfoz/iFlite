@@ -21,6 +21,7 @@
 @implementation MainViewController
 
 @synthesize textInput;
+@synthesize voiceLabel;
 
 cst_voice *register_cmu_time_awb(const char *voxdir);
 cst_voice *register_cmu_us_awb(const char *voxdir);
@@ -106,6 +107,7 @@ cst_voice *register_cmu_us_slt(const char *voxdir);
 - (void)dealloc
 {
     [textInput release];
+    [voiceLabel release];
     [super dealloc];
 }
 
