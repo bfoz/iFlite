@@ -86,10 +86,10 @@
 								<int key="NSID">2</int>
 							</object>
 						</object>
-						<bool key="IBUIClearsOnBeginEditing">YES</bool>
 						<bool key="IBUIAdjustsFontSizeToFit">YES</bool>
 						<float key="IBUIMinimumFontSize">17</float>
 						<object class="IBUITextInputTraits" key="IBUITextInputTraits"/>
+						<int key="IBUIClearButtonMode">1</int>
 					</object>
 					<object class="IBUILabel" id="1025933795">
 						<reference key="NSNextResponder" ref="883825266"/>
