@@ -12,7 +12,7 @@
 @implementation FlipsideViewController
 
 @synthesize delegate;
-
+@synthesize voicePicker;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -50,5 +50,35 @@
     [super dealloc];
 }
 
+- (void)setVoice:(unsigned)index
+{
+    [voicePicker selectRow:index inComponent:0 animated:NO];
+}
+
+#pragma mark -
+#pragma mark UIPickerViewDelegate
+
+- (NSString*)pickerView:(UIPickerView*)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component;
+{
+    return [NSString stringWithCString:[self.delegate voiceName:row] encoding:NSASCIIStringEncoding];
+}
+
+- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
+{
+    [self.delegate setVoice:row];
+}
+
+#pragma mark -
+#pragma mark UIPickerViewDataSource
+
+- (NSInteger)numberOfComponentsInPickerView:(UIPickerView*)thePickerView
+{
+    return 1;
+}
+
+- (NSInteger)pickerView:(UIPickerView *)thePickerView numberOfRowsInComponent:(NSInteger)component
+{
+    return [self.delegate numVoices];
+}
 
 @end

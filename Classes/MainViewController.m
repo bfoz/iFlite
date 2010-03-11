@@ -18,6 +18,16 @@
 #define VOICE_INDEX_US_RMS	4
 #define VOICE_INDEX_US_SLT	5
 
+static const char* voiceNames[] =
+{
+    "Time AWB",
+    "AWB",
+    "Kal",
+    "Kal16",
+    "RMS",
+    "SLT",
+};
+
 @implementation MainViewController
 
 @synthesize textInput;
@@ -64,12 +74,6 @@ cst_voice *register_cmu_us_slt(const char *voxdir);
  */
 
 
-- (void)flipsideViewControllerDidFinish:(FlipsideViewController *)controller {
-    
-	[self dismissModalViewControllerAnimated:YES];
-}
-
-
 - (IBAction)showInfo {    
 	
 	FlipsideViewController *controller = [[FlipsideViewController alloc] initWithNibName:@"FlipsideView" bundle:nil];
@@ -77,7 +81,8 @@ cst_voice *register_cmu_us_slt(const char *voxdir);
 	
 	controller.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
 	[self presentModalViewController:controller animated:YES];
-	
+    [controller setVoice:2];
+
 	[controller release];
 }
 
@@ -109,6 +114,30 @@ cst_voice *register_cmu_us_slt(const char *voxdir);
     [textInput release];
     [voiceLabel release];
     [super dealloc];
+}
+
+#pragma mark -
+#pragma mark FlipsideViewControllerDelegate
+
+- (void)flipsideViewControllerDidFinish:(FlipsideViewController *)controller
+{
+    [self dismissModalViewControllerAnimated:YES];
+}
+
+- (unsigned)numVoices
+{
+    return sizeof(voices)/sizeof(voices[0]);
+}
+
+- (void)setVoice:(unsigned)index
+{
+    voiceLabel.text = [NSString stringWithFormat:@"%s says", voiceNames[index], nil];
+    voice = voices[index];
+}
+
+- (const char*)voiceName:(unsigned)index
+{
+    return voiceNames[index];
 }
 
 #pragma mark -
