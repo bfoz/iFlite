@@ -12,6 +12,7 @@
 
 @interface MainViewController : UIViewController <FlipsideViewControllerDelegate, UITextFieldDelegate>
 {
+    UIActivityIndicatorView*	spinner;
     UITextField*    textInput;
     UILabel*	    voiceLabel;
 
@@ -19,6 +20,7 @@
     cst_voice*	voice;
 }
 
+@property (nonatomic, retain) IBOutlet UIActivityIndicatorView* spinner;
 @property (nonatomic, retain) IBOutlet UITextField *textInput;
 @property (nonatomic, retain) IBOutlet UILabel* voiceLabel;
 

@@ -30,6 +30,7 @@ static const char* voiceNames[] =
 
 @implementation MainViewController
 
+@synthesize spinner;
 @synthesize textInput;
 @synthesize voiceLabel;
 
@@ -111,6 +112,7 @@ cst_voice *register_cmu_us_slt(const char *voxdir);
 
 - (void)dealloc
 {
+    [spinner release];
     [textInput release];
     [voiceLabel release];
     [super dealloc];
@@ -143,10 +145,11 @@ cst_voice *register_cmu_us_slt(const char *voxdir);
 #pragma mark -
 #pragma mark UITextFieldDelegate
 
-void completion(SystemSoundID ssID, void* clientData)
+void completion(SystemSoundID ssID, void* spinner)
 {
     AudioServicesDisposeSystemSoundID(ssID);
     AudioServicesRemoveSystemSoundCompletion(ssID);
+    [(UIActivityIndicatorView*)spinner stopAnimating];	// Stop the spinner
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField*)field
@@ -165,10 +168,10 @@ void completion(SystemSoundID ssID, void* clientData)
     SystemSoundID soundID;
     AudioServicesCreateSystemSoundID((CFURLRef)url, &soundID);
 
-    AudioServicesAddSystemSoundCompletion(soundID, NULL, NULL, completion, NULL);
+    AudioServicesAddSystemSoundCompletion(soundID, NULL, NULL, completion, spinner);
 
-    //Use audio services to play the sound
-    AudioServicesPlaySystemSound(soundID);
+    [spinner startAnimating];		    // Start the spinner
+    AudioServicesPlaySystemSound(soundID);  // Use audio services to play the sound
 
     [textInput resignFirstResponder];
     return YES;
