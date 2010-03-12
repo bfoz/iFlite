@@ -154,24 +154,27 @@ void completion(SystemSoundID ssID, void* spinner)
 
 - (BOOL)textFieldShouldReturn:(UITextField*)field
 {
-    NSArray* paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
-							 NSUserDomainMask,
-							 YES);
-    NSString* dir = [paths objectAtIndex:0];
-    NSString* path = [NSString stringWithFormat: @"%@/%s", dir, "recording.wav"];
+    if(field.text.length)
+    {
+	NSArray* paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
+							     NSUserDomainMask,
+							     YES);
+	NSString* dir = [paths objectAtIndex:0];
+	NSString* path = [NSString stringWithFormat: @"%@/%s", dir, "recording.wav"];
 
-    flite_text_to_speech([field.text UTF8String], voice, [path UTF8String]);
+	flite_text_to_speech([field.text UTF8String], voice, [path UTF8String]);
 
-    NSURL* url = [NSURL fileURLWithPath:path isDirectory:NO];
+	NSURL* url = [NSURL fileURLWithPath:path isDirectory:NO];
 
-    //Use audio sevices to create the sound
-    SystemSoundID soundID;
-    AudioServicesCreateSystemSoundID((CFURLRef)url, &soundID);
+	//Use audio sevices to create the sound
+	SystemSoundID soundID;
+	AudioServicesCreateSystemSoundID((CFURLRef)url, &soundID);
 
-    AudioServicesAddSystemSoundCompletion(soundID, NULL, NULL, completion, spinner);
+	AudioServicesAddSystemSoundCompletion(soundID, NULL, NULL, completion, spinner);
 
-    [spinner startAnimating];		    // Start the spinner
-    AudioServicesPlaySystemSound(soundID);  // Use audio services to play the sound
+	[spinner startAnimating];		    // Start the spinner
+	AudioServicesPlaySystemSound(soundID);	    // Use audio services to play the sound
+    }
 
     [textInput resignFirstResponder];
     return YES;
