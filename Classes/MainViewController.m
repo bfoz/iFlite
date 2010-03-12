@@ -11,6 +11,16 @@
 #import "MainViewController.h"
 #import "MainView.h"
 
+static const char* phrases[] =
+{
+    "Watson, come here, I need you",
+    "Great kid, don't get cocky",
+    "I would rather kiss a wookie!",
+    "Just do it",
+    "Been there, done that",
+    "Not all those who wander are lost",
+};
+
 #define VOICE_INDEX_TIME_AWB	0
 #define VOICE_INDEX_US_AWB	1
 #define VOICE_INDEX_US_KAL	2
@@ -30,6 +40,7 @@ static const char* voiceNames[] =
 
 @implementation MainViewController
 
+@synthesize phrasePicker;
 @synthesize spinner;
 @synthesize textInput;
 @synthesize voiceLabel;
@@ -152,32 +163,60 @@ void completion(SystemSoundID ssID, void* spinner)
     [(UIActivityIndicatorView*)spinner stopAnimating];	// Stop the spinner
 }
 
+- (void) speak:(const char*)text
+{
+    NSArray* paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
+							 NSUserDomainMask,
+							 YES);
+    NSString* dir = [paths objectAtIndex:0];
+    NSString* path = [NSString stringWithFormat: @"%@/%s", dir, "recording.wav"];
+
+    flite_text_to_speech(text, voice, [path UTF8String]);
+
+    NSURL* url = [NSURL fileURLWithPath:path isDirectory:NO];
+
+    //Use audio sevices to create the sound
+    SystemSoundID soundID;
+    AudioServicesCreateSystemSoundID((CFURLRef)url, &soundID);
+
+    AudioServicesAddSystemSoundCompletion(soundID, NULL, NULL, completion, spinner);
+
+    [spinner startAnimating];		    // Start the spinner
+    AudioServicesPlaySystemSound(soundID);  // Use audio services to play the sound
+}
+
 - (BOOL)textFieldShouldReturn:(UITextField*)field
 {
-    if(field.text.length)
-    {
-	NSArray* paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
-							     NSUserDomainMask,
-							     YES);
-	NSString* dir = [paths objectAtIndex:0];
-	NSString* path = [NSString stringWithFormat: @"%@/%s", dir, "recording.wav"];
-
-	flite_text_to_speech([field.text UTF8String], voice, [path UTF8String]);
-
-	NSURL* url = [NSURL fileURLWithPath:path isDirectory:NO];
-
-	//Use audio sevices to create the sound
-	SystemSoundID soundID;
-	AudioServicesCreateSystemSoundID((CFURLRef)url, &soundID);
-
-	AudioServicesAddSystemSoundCompletion(soundID, NULL, NULL, completion, spinner);
-
-	[spinner startAnimating];		    // Start the spinner
-	AudioServicesPlaySystemSound(soundID);	    // Use audio services to play the sound
-    }
-
+    if( field.text.length )
+	[self speak:[field.text UTF8String]];
     [textInput resignFirstResponder];
     return YES;
+}
+
+#pragma mark -
+#pragma mark UIPickerViewDelegate
+
+- (NSString*)pickerView:(UIPickerView*)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component;
+{
+    return [NSString stringWithCString:phrases[row] encoding:NSASCIIStringEncoding];
+}
+
+- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
+{
+    [self speak:phrases[row]];
+}
+
+#pragma mark -
+#pragma mark UIPickerViewDataSource
+
+- (NSInteger)numberOfComponentsInPickerView:(UIPickerView*)pickerView
+{
+    return 1;
+}
+
+- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
+{
+    return sizeof(phrases)/sizeof(phrases[0]);
 }
 
 @end

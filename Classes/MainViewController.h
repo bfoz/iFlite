@@ -10,8 +10,9 @@
 
 #import "flite.h"
 
-@interface MainViewController : UIViewController <FlipsideViewControllerDelegate, UITextFieldDelegate>
+@interface MainViewController : UIViewController <FlipsideViewControllerDelegate, UITextFieldDelegate, UIPickerViewDataSource, UIPickerViewDelegate>
 {
+    UIPickerView*   phrasePicker;
     UIActivityIndicatorView*	spinner;
     UITextField*    textInput;
     UILabel*	    voiceLabel;
@@ -20,6 +21,7 @@
     cst_voice*	voice;
 }
 
+@property (nonatomic, retain) IBOutlet UIPickerView* phrasePicker;
 @property (nonatomic, retain) IBOutlet UIActivityIndicatorView* spinner;
 @property (nonatomic, retain) IBOutlet UITextField *textInput;
 @property (nonatomic, retain) IBOutlet UILabel* voiceLabel;
